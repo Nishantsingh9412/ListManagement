@@ -82,19 +82,15 @@ export const createListWithCSV = async (req, res) => {
 }
 
 function replacePlaceholders(body, user) {
-    const placeholderPattern = /\[(\w+)\]/g;
-
-    const result = body.replace(placeholderPattern, function(_, placeholder) {
-        if (user.hasOwnProperty(placeholder)) {
+    return body.replace(/\[(\w+)\]/g, (_, placeholder) => {
+        if (placeholder in user) {
             return user[placeholder];
-        }
-
-        if (user.properties && user.properties.hasOwnProperty(placeholder)) {
+        } else if (user.properties && placeholder in user.properties) {
             return user.properties[placeholder];
+        } else {
+            return '';
         }
-        return '';
     });
-    return result;
 }
 
 async function sendMailToUser(user, mailBody) {
@@ -155,9 +151,12 @@ export const sendMailToAllUsers = async (req, res) => {
             });
         } else {
             if (checkUsersSubsCount === allusersLength) {
-                return res.status(400).json({success: false,message: "All Users are unsubscribed, No emails sent"});
+                return res.status(400).json({ success: false, message: "All Users are unsubscribed, No emails sent" });
             }
-            return res.status(200).json({success: true,message: "Emails sent successfully to all users"});
+            return res.status(200).json({
+                success: true,
+                message: "Emails sent successfully to all users"
+            });
         }
     } catch (error) {
         console.log("This is error ---> while sending mail to all users", error);
