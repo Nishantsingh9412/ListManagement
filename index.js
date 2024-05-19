@@ -2,6 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import listRoutes from './routes/lists.js';
 
 const app = express();
 dotenv.config();
@@ -12,11 +13,21 @@ app.use(cors());
 
 const PORT = 5000;
 
+app.use('/lists', listRoutes);
+
 app.get('/', (req, res) => {
-    res.send("Hello World");
+    res.send("The ListManagement API is Up and Running !");
 })
 
+const DATABASE_URL = "mongodb+srv://nishantsingh:NcI5n8Xb5jeOvjwz@cluster0.0muaxm6.mongodb.net"
 
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+mongoose.connect(DATABASE_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => {
+        console.log('Successfully connected to MongoDB Atlas!');
+        app.listen(PORT, () => console.log(`Server running on port: ${PORT}`))
+    })
+    .catch((error) => console.log('Error connecting to MongoDB Atlas:', error.message));
+
+
+
+
