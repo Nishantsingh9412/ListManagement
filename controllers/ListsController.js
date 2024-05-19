@@ -11,7 +11,7 @@ export const createListNormal = async (req, res) => {
     }
 
     try {
-        const newListData = await List.create({
+        const newListData = await Lists.create({
             title,
             properties
         })
