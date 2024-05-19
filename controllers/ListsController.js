@@ -116,7 +116,7 @@ async function sendMailToUser(user, mailBody) {
 
 export const sendMailToAllUsers = async (req, res) => {
     const mailBody = `
-        <h1>Hey [name]!</h1>
+        <h1>Hey [name] ! </h1>
         <p>
             Thank you for signing up with your email [email].
             We have received your city as [city] and state as [state].
